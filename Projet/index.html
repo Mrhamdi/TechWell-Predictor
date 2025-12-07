@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mental Health Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1B3C53;
+            color: #313647;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 50px auto;
+            box-shadow: 0px 8px 15px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #850E35;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #850E35;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #313647;
+            color: white;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #850E35;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Mental Health Prediction</h2>
+    <form id="predictionForm">
+        <label for="age">Age:</label>
+        <input type="number" class="form-control" id="age" required>
+
+        <label for="gender">Gender:</label>
+        <select class="form-select" id="gender" required>
+            <option value="">Select...</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="family_history">Family History:</label>
+        <select class="form-select" id="family_history" required>
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="work_interfere">Work Interfere:</label>
+        <select class="form-select" id="work_interfere" required>
+            <option value="">Select...</option>
+            <option value="Often">Often</option>
+            <option value="Sometimes">Sometimes</option>
+            <option value="Rarely">Rarely</option>
+            <option value="Never">Never</option>
+        </select>
+
+        <label for="benefits">Benefits:</label>
+        <select class="form-select" id="benefits" required>
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Don't know">Don't know</option>
+        </select>
+
+        <label for="care_options">Care Options:</label>
+        <select class="form-select" id="care_options" required>
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Don't know">Don't know</option>
+        </select>
+
+        <label for="mental_health_consequence">Mental Health Consequence:</label>
+        <select class="form-select" id="mental_health_consequence" required>
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Maybe">Maybe</option>
+        </select>
+
+        <button type="submit" class="btn btn-block">Predict</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<!-- jQuery et AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#predictionForm").submit(function (e) {
+            e.preventDefault();
+
+            const data = {
+                Age: parseInt($("#age").val()),
+                Gender: $("#gender").val(),
+                family_history: $("#family_history").val(),
+                work_interfere: $("#work_interfere").val(),
+                benefits: $("#benefits").val(),
+                care_options: $("#care_options").val(),
+                mental_health_consequence: $("#mental_health_consequence").val()
+            };
+
+            $.ajax({
+                url: "http://127.0.0.1:8000/predict",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    $("#result").html("Prediction: " + response.result);
+                },
+                error: function (xhr, status, error) {
+                    $("#result").html("Error: " + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
